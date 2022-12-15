@@ -121,7 +121,48 @@ Getting a record from a database:
 `user = User.find(1)` or `User.first/second/third/.../last`
 
 Updating a record:
-`user.update(key:value, key:value, etc.)
+`user.update(key:value, key:value, etc.)`
 
 Delete a record:
 `user.destroy`
+
+## In the even of an emergency!
+1. Delete the `db/schema.rb`
+2. Confirm that all of the data types and column names are spelled correctly (and are the correct type)
+3. Run: `rake db:migrate:reset` to get the DB restarted and all of the migrations back up
+4. You can also daisy-chain the commands: `rake db:reset db:migrate db:seed`
+
+To populate  (seed) a database:
+`rake db:seed`
+
+## Methods
+
+There are two variaties of methods:
+
+### Instance method
+A method used on one instance of an object
+```Ruby
+def popular_tweets
+  return self.tweets.order(times_retweeted: :desc)
+end
+```
+
+### Class method
+A method used on an entire class of objects
+``` Ruby
+def User.most_active
+  User.all.max_by { |u| u.tweets.count}
+end
+```
+### Class names, instance names need to be EXACT:
+```Ruby
+class CreateCapitalnameplural < ActiveRecord::Migration
+  def change
+    create_table :plural_lowercasename do |tempvariable|
+      tempvariable.string/boolean/integer :attribute_name
+      tempvariable.string/boolean/integer :attribute_name
+      tempvariable.string/boolean/integer :attribute_name
+    end
+  end
+end
+```
