@@ -126,7 +126,7 @@ Updating a record:
 Delete a record:
 `user.destroy`
 
-## In the even of an emergency!
+## In the event of an emergency!
 1. Delete the `db/schema.rb`
 2. Confirm that all of the data types and column names are spelled correctly (and are the correct type)
 3. Run: `rake db:migrate:reset` to get the DB restarted and all of the migrations back up
@@ -165,4 +165,22 @@ class CreateCapitalnameplural < ActiveRecord::Migration
     end
   end
 end
+```
+
+### Models
+`singlularclassnamelowercase.rb`
+```Ruby
+class Capitalnamesingular < ActiveRecord::Base
+  belongs_to :othermodel
+  has_many :othermodels
+  has_many :othermodels, through: :anotherothermodels
+end
+```
+
+### Seeds
+```Ruby
+Classname.destroy_all #this will remove previous instances when the db is reset starting the id from 1
+
+Classnamesingular.create(key: "stringvalue", key: integervalue, key: booleanvalue, key: Otherclass.first/second/etc.value, key: othervariable.value)
+variablename1 = Classnamesingular.create(key: "stringvalue", key: integervalue, key: booleanvalue, key: Otherclass.first/second/etc.value, key: othervariable.value)
 ```
