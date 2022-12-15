@@ -250,3 +250,41 @@ class Dev < ActiveRecord::Base
   end
 end
 ```
+
+```Ruby
+class User < ActiveRecord::Base
+    has_many :tweets
+    #class methods
+
+    #most active user
+    def User.most_active
+      User.all.max_by { |u| u.tweets.count}
+    end
+
+    #model methods
+
+    #times retweeted
+    def retweet(tweet)
+      tweet.update(times_retweeted: tweet.times_retweeted + 1)
+      p "Retweeted: #{tweet.content}"
+      return tweet
+    end
+
+    #most popular tweet
+    def most_popular_tweet
+      return self.tweets.max_by { |t| t.times_retweeted}
+    end
+
+    #least popular tweet
+    def least_popular_tweet
+      return self.tweets.min_by { |t| t.times_retweeted}
+    end
+
+    #most popular tweets
+    def popular_tweets
+    #user.tweets.order(times_retweeted: :asc).sort_by { |t| t.times_retweeted}
+      return self.tweets.order(times_retweeted: :desc)
+    end
+end
+```
+
