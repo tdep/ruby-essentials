@@ -66,10 +66,15 @@ Migration files control the data modeling of tables and how data will be convert
 when moving between the database and the Ruby app.
 
 ### creating Migration Files
+
 After `bundle install`, set up a migration table using rake:
 `bundle exec rake db:create_migration NAME=create_********s`
 
+### Accessing the rake console:
+`rake console`
+
 ### Migration Signatures
+
 When you first create a Migration File, you end up with this:
 ```Ruby
 class CreateUsers < ActiveRecord::Migration[7.0]
@@ -78,3 +83,45 @@ class CreateUsers < ActiveRecord::Migration[7.0]
 end
 ```
 
+You can then populate it by adding the data to be passed and its type:
+```Ruby
+class CreateUsers < ActiveRecord::Migration[7.0]
+  def change
+    create_table :table_name_plural do |t|
+      t.ruby_data_type :attribute_name
+      t.ruby_data_type :another_attribute_name
+    end
+  end
+end
+```
+
+For example:
+```Ruby
+class CreateUsers < ActiveRecord::Migration[7.0]
+  def change
+    create_table :trees do |t|
+      t.string :tree_name
+      t.integer :tree_age
+      t.boolean :tree_living
+      t.Other :Other_table
+    end
+  end
+end
+```
+
+You can check on the status of a migration using the following:
+`rake db:migrate:status`
+
+## CRUD and AR
+
+Creating a record:
+`user = User.create(key:value, key:value, etc.)`
+
+Getting a record from a database:
+`user = User.find(1)` or `User.first/second/third/.../last`
+
+Updating a record:
+`user.update(key:value, key:value, etc.)
+
+Delete a record:
+`user.destroy`
