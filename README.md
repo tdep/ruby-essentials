@@ -250,15 +250,15 @@ class Dev < ActiveRecord::Base
   end
 end
 ```
-tweets can have content
-tweets belong to a user
-tweets store the number of times retweeted
-user.tweets returns a list of tweets
-user can retweet a tweet object which will raise it's retweet count by 1
-Get the most active user (class method) by returning the user with the most tweets
-Get a user's most popular tweet: return the tweet with the most retweets
-user.popular_tweets returns a list of tweets in order of how many times they've been retweeted least to greatest
-get a user's least popular tweet
+-tweets can have content
+-tweets belong to a user
+-tweets store the number of times retweeted
+-user.tweets returns a list of tweets
+-user can retweet a tweet object which will raise it's retweet count by 1
+-Get the most active user (class method) by returning the user with the most tweets
+-Get a user's most popular tweet: return the tweet with the most retweets
+-user.popular_tweets returns a list of tweets in order of how many times they've been retweeted least to greatest
+-get a user's least popular tweet
 ```Ruby
 class User < ActiveRecord::Base
     has_many :tweets
