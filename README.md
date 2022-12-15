@@ -178,9 +178,75 @@ end
 ```
 
 ### Seeds
+`db/seeds.rb`
 ```Ruby
 Classname.destroy_all #this will remove previous instances when the db is reset starting the id from 1
 
 Classnamesingular.create(key: "stringvalue", key: integervalue, key: booleanvalue, key: Otherclass.first/second/etc.value, key: othervariable.value)
 variablename1 = Classnamesingular.create(key: "stringvalue", key: integervalue, key: booleanvalue, key: Otherclass.first/second/etc.value, key: othervariable.value)
+```
+
+## Example methods:
+
+- `Freebie#print_details`
+  - should return a string formatted as follows:
+    `{insert dev's name} owns a {insert freebie's item_name} from {insert company's name}`
+    
+```Ruby
+class Freebie < ActiveRecord::Base
+  belongs_to :dev
+  belongs_to :company
+
+  def print_details
+    "#{self.dev.name} owns a #{self.item_name} from #{self.company.name}"
+  end
+end
+```
+
+- `Company#give_freebie(dev, item_name, value)`
+  - takes a `dev` (an instance of the `Dev` class), an `item_name` (string), and a `value`
+    as arguments, and creates a new `Freebie` instance associated with this
+    company and the given dev
+- `Company.oldest_company`
+  - returns the `Company` instance with the earliest founding year
+
+```Ruby
+class Company < ActiveRecord::Base
+  has_many :freebies
+  has_many :devs, through: :freebies
+
+  def give_freebie(dev, item_name, value)
+    Freebie.create(dev_id: dev.id, item_name: item_name, value: value)
+  end
+
+  def Company.oldest_company
+    return Company.all.min_by { |c| c.founding_year }
+  end
+
+end
+```
+
+- `Dev#received_one?(item_name)`
+  - accepts an `item_name` (string) and returns true if any of the freebies
+    associated with the dev has that `item_name`, otherwise returns false
+- `Dev#give_away(dev, freebie)`
+  - accepts a `Dev` instance and a `Freebie` instance, changes the freebie's dev
+    to be the given dev; your code should only make the change if the freebie
+    belongs to the dev who's giving it away
+    
+```Ruby
+class Dev < ActiveRecord::Base
+  has_many :freebies
+  has_many :companies, through: :freebies
+
+  def received_one?(item_name)
+    freebies.map { |f| f.item_name}.include?(item_name)
+  end
+
+  def give_away(dev, freebie)
+    if freebie.dev.id == self.id
+      freebie.update(dev_id:dev.id)
+    end
+  end
+end
 ```
